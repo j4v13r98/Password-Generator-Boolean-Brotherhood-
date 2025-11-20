@@ -6,23 +6,21 @@ def password_generator(entropy_target: int, phrase: str, number: str)-> str:
     Generate a password based on the arguments given by the user
     '''
     words = phrase.split()
-    initials = "".join(word[:2] for word in words) #obtain a string with the first letter of each word
+    initials = "".join(word[:3] for word in words) #obtain a string with the first letter of each word
     initials_with_sym = replace_letters_with_symbols(initials)
     capitalized_initials = capitilize_par_character(initials_with_sym)
 
     password = str(capitalized_initials) + number
     
     if entropy_test(password) < entropy_target:
-        print('⚠ Warning: entropy too low:', entropy_test(password))
-    return password, entropy_test(password)
+        print('⚠ Warning: entropy too low, consider using a longer phrase or number.')
+    return password
 
 def replace_letters_with_symbols(initials: str)-> str:
     '''
     Replace specific letters with symbol
     '''
-    substitutions = {
-        "a": "@", "s": "$", "o": "0", "e": "3", "i": "¡", "t": "+"
-    }
+    substitutions = {"a": "@", "s": "$", "o": "0", "e": "3", "i": "¡", "t": "+" }
 
     result = ""
     for character in initials:
@@ -62,4 +60,7 @@ if __name__ == "__main__":
     min_length, entropy_target = account_type()
     phrase = input("Enter a sentence: ").strip().lower()
     number = input("Enter a number: ").strip()
-    print("Your password is:", password_generator(entropy_target, phrase, number))
+
+    password = password_generator(entropy_target, phrase, number)
+    print("Your password is:", password)
+    print("Entropy:", round(entropy_test(password), 2))
