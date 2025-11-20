@@ -56,9 +56,9 @@ def valid_phrase():
     while True:
         phrase = input("Enter a sentence: ").strip().lower()
         words = phrase.split()
-        if len(words)>=3:
+        if len(words)>=4: 
             return phrase
-        print("Invalid phrase. Please enter at least 3 words.")
+        print("Invalid phrase. Please enter at least 4 words.")
 
 def valid_num():
     '''
