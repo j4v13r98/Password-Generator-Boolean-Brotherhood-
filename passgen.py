@@ -3,7 +3,7 @@ from collections import Counter
 
 def password_generator(entropy_target: int, phrase: str, number: str)-> str:
     '''
-    Generate a password based on the arguments given by the user
+    Generates a password based on the arguments given by the user
     '''
     words = phrase.split()
     initials = "".join(word[:3] for word in words) #obtain a string with the first letter of each word
@@ -18,7 +18,7 @@ def password_generator(entropy_target: int, phrase: str, number: str)-> str:
 
 def replace_letters_with_symbols(initials: str)-> str:
     '''
-    Replace specific letters with symbol
+    Replaces specific letters with symbols
     '''
     substitutions = {"a": "@", "s": "$", "o": "0", "e": "3", "i": "¡", "t": "+" }
 
@@ -37,7 +37,7 @@ def capitilize_par_character(text: str)-> str:
 
     return "".join(characters)
 
-def account_type()-> tuple[int, int]:
+def valid_account_type()-> tuple[int, int]:
     '''
     Associates the use of the password with their minimun lenght and entropy target
     '''
@@ -49,6 +49,27 @@ def account_type()-> tuple[int, int]:
             return types[pw_type]
         print("Invalid type. Please try again.")
 
+def valid_phrase():
+    '''
+    Ensures the phrase entered by the user is valid based on the number of words
+    '''
+    while True:
+        phrase = input("Enter a sentence: ").strip().lower()
+        words = phrase.split()
+        if len(words)>=3:
+            return phrase
+        print("Invalid phrase. Please enter at least 3 words.")
+
+def valid_num():
+    '''
+    Ensures the number entered by the user is valid based on its length and numeric content
+    '''
+    while True:
+        number = input("Enter a number: ").strip()
+        if number.isdigit() and len(number) >= 4:
+            return number
+        print("Invalid number. Please enter a numeric value with at least 4 digits.")
+
 def entropy_test(password: str)-> float:
     counts = Counter(password)
     total = len(password)
@@ -57,9 +78,9 @@ def entropy_test(password: str)-> float:
 
 
 if __name__ == "__main__":
-    min_length, entropy_target = account_type()
-    phrase = input("Enter a sentence: ").strip().lower()
-    number = input("Enter a number: ").strip()
+    min_length, entropy_target = valid_account_type()
+    phrase = valid_phrase()
+    number = valid_num()
 
     password = password_generator(entropy_target, phrase, number)
     print("Your password is:", password)
