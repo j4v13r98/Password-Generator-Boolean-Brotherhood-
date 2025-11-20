@@ -78,10 +78,21 @@ def entropy_test(password: str)-> float:
 
 
 if __name__ == "__main__":
-    min_length, entropy_target = valid_account_type()
-    phrase = valid_phrase()
-    number = valid_num()
+    while True:
+        min_length, entropy_target = valid_account_type()
+        phrase = valid_phrase()
+        number = valid_num()
 
-    password = password_generator(entropy_target, phrase, number)
-    print("Your password is:", password)
-    print("Entropy:", round(entropy_test(password), 2))
+        password = password_generator(entropy_target, phrase, number)
+        print("Your password is:", password)
+        print("Entropy:", round(entropy_test(password), 2))
+
+        while True:
+            restart_program = input('Would you like to create another password? (y/n): ').lower()
+            if restart_program in ("y", "n"):
+                if restart_program == "y":
+                    break
+                else:
+                    exit()
+            else:
+                print('Invalid input. Please write "y" (yes) or "n" (no).')
