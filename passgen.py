@@ -1,25 +1,24 @@
 import math
 from collections import Counter
 
-def password_generator(context:str, phrase: str, number: str)-> str:
+def password_generator(entropy_target: int, phrase: str, number: str)-> str:
     '''
     Generate a password based on the arguments given by the user
     '''
-    min_lengt, entropy_target = account_type(context)
     words = phrase.split()
-    initials = "".join(word[0] for word in words) #obtain a string with the first letter of each word
+    initials = "".join(word[:2] for word in words) #obtain a string with the first letter of each word
     initials_with_sym = replace_letters_with_symbols(initials)
-    capitalized_initials = capitilize_2rd_character(initials_with_sym)
+    capitalized_initials = capitilize_par_character(initials_with_sym)
 
     password = str(capitalized_initials) + number
     
-    while entropy_test(password) < entropy_target:
-        password = password #por poner algo
-    return password
+    if entropy_test(password) < entropy_target:
+        print('⚠ Warning: entropy too low:', entropy_test(password))
+    return password, entropy_test(password)
 
 def replace_letters_with_symbols(initials: str)-> str:
     '''
-    Replace specific letters to a symbol
+    Replace specific letters with symbol
     '''
     substitutions = {
         "a": "@", "s": "$", "o": "0", "e": "3", "i": "¡", "t": "+"
@@ -31,7 +30,7 @@ def replace_letters_with_symbols(initials: str)-> str:
 
     return result
 
-def capitilize_2rd_character(text: str)-> str:
+def capitilize_par_character(text: str)-> str:
     characters = list(text)
 
     for position, character in enumerate(characters):
@@ -40,26 +39,27 @@ def capitilize_2rd_character(text: str)-> str:
 
     return "".join(characters)
 
-def account_type(text: str)-> tuple:
+def account_type()-> tuple[int, int]:
     '''
     Associates the use of the password with their minimun lenght and entropy target
     '''
     types = {'banking': (20, 90), 'email': (16, 70), 'gaming': (12, 50), 'social media': (18, 80),}
-    
-    while text not in types:
-        text = input("Whats your password for?(banking, email, gaming, social media)")
 
-    return types.get(text)
+    while True:
+        pw_type = input("Whats your password for?(banking, email, gaming, social media): ").strip().lower()
+        if pw_type in types:
+            return types[pw_type]
+        print("Invalid type. Please try again.")
 
-def entropy_test(text: str)-> int:
-    counts = Counter(text)
-    total = len(text)
+def entropy_test(password: str)-> float:
+    counts = Counter(password)
+    total = len(password)
     entropy = -sum((count/total) * math.log2(count/total) for count in counts.values())
-    return entropy
+    return entropy * total
 
 
 if __name__ == "__main__":
-    context = input("Whats your password for?(banking, email, gaming, social media)")
+    min_length, entropy_target = account_type()
     phrase = input("Enter a sentence: ").strip().lower()
     number = input("Enter a number: ").strip()
-    print("Your password is: ", password_generator(context, phrase, number))
+    print("Your password is:", password_generator(entropy_target, phrase, number))
