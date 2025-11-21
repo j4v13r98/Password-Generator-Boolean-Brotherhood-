@@ -1,4 +1,4 @@
-# Password Generator - The Boolean Brotherhood
+# Cypherhood - The Boolean Brotherhood
 A customizable and entropy-aware password generator built in Python.
 It allows users to create memorable but highly secure passwords based on a phrase, a number and the security requirements of different account types (banking, emmail, gaming, social media). 
 
