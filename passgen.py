@@ -26,6 +26,7 @@ def replace_letters_with_symbols(initials: str)-> str:
 
 def capitilize_even_character(text: str)-> str:
     '''Capitalizes every even character in the string'''
+
     characters = list(text)
 
     for position, character in enumerate(characters):
@@ -66,6 +67,7 @@ def valid_num():
 
 def entropy_test(password: str)-> float:
     '''Calculates the entropy of the password'''
+
     counts = Counter(password)
     total = len(password)
     entropy = -sum((count/total) * math.log2(count/total) for count in counts.values())
